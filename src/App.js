@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from "react";
+import axios from "axios";
 
-async function App() {
+function App() {
   const [weather, changeWeather] = useState({
     date: "",
     day: "",
@@ -9,15 +10,40 @@ async function App() {
     minTemp: "",
     wind: "",
   });
+  const [days, changeDays] = useState([]);
+
+  const checkStatus = (response) => {
+    if (response.status >= 200 && response.status < 300) {
+      return true;
+    } else {
+      return false;
+    }
+  };
+
+  async function fetchData() {
+    let res = await axios.get(
+      "api.openweathermap.org/data/2.5/forecast/daily?lat={53.381130}&lon={53.381130}&cnt={5}&appid={bc5a7368c606db7357598739c51c174b}"
+    );
+    let success = checkStatus(res);
+    if (!success) {
+      alert("Error retrieving weather - please try again");
+      return;
+    }
+    console.log(res);
+  }
+
+  const listDays = async () => {
+    let res = await axios.get(
+      "api.openweathermap.org/data/2.5/forecast/daily?lat={53.381130}&lon={53.381130}&cnt={5}&appid={bc5a7368c606db7357598739c51c174b}"
+    );
+    let success = checkStatus(res);
+    if (!success) {
+      alert("Error retrieving next 4 days - please try again");
+      return;
+    }
+  };
 
   useEffect(() => {
-    async function fetchData() {
-      let res = await fetch(
-        "https://api.openweathermap.org/data/3.0/onecall?lat={53.381130}&lon={53.381130}&appid={7b2dfaec12cb153a5690193e36f587ce}"
-      );
-      res = await res.json();
-      console.log(res);
-    }
     fetchData();
     changeWeather({
       date: "19 November",
@@ -27,7 +53,12 @@ async function App() {
       minTemp: "5c",
       wind: "6kmh",
     });
+    listDays();
   }, []);
+
+  const makeNextDaysTable = () => {
+    return <div>This will display the next 4 days</div>;
+  };
 
   return (
     <div>
@@ -50,6 +81,7 @@ async function App() {
       <p>
         <b>Wind Speed:</b> {weather.wind}{" "}
       </p>
+      {makeNextDaysTable()}
     </div>
   );
 }
@@ -57,4 +89,4 @@ async function App() {
 export default App;
 
 // Weather API Link
-// "https://api.openweathermap.org/data/3.0/onecall?lat={53.381130}&lon={53.381130}&appid={7b2dfaec12cb153a5690193e36f587ce}"
+// "https://api.openweathermap.org/data/3.0/onecall?lat={53.381130}&lon={53.381130}&appid={bc5a7368c606db7357598739c51c174b}"
