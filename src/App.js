@@ -21,8 +21,9 @@ function App() {
   };
 
   async function fetchData() {
+    console.log("fetching");
     let res = await axios.get(
-      "api.openweathermap.org/data/2.5/forecast/daily?lat={53.381130}&lon={53.381130}&cnt={5}&appid={bc5a7368c606db7357598739c51c174b}"
+      "https://api.openweathermap.org/data/2.5/weather?lat=50&lon=50&appid=68d92c74ce4c43f198d29b74a45995e4"
     );
     let success = checkStatus(res);
     if (!success) {
@@ -34,8 +35,10 @@ function App() {
 
   const listDays = async () => {
     let res = await axios.get(
-      "api.openweathermap.org/data/2.5/forecast/daily?lat={53.381130}&lon={53.381130}&cnt={5}&appid={bc5a7368c606db7357598739c51c174b}"
+      "https://api.openweathermap.org/data/2.5/forecast?lat=44.34&lon=10.99&appid=68d92c74ce4c43f198d29b74a45995e4&units=metric"
     );
+    // console.log(res.data.list[0], res.data.list[7]);
+    console.log(res.data.list[0], res.data.list[7]);
     let success = checkStatus(res);
     if (!success) {
       alert("Error retrieving next 4 days - please try again");
@@ -44,7 +47,7 @@ function App() {
   };
 
   useEffect(() => {
-    fetchData();
+    // fetchData();
     changeWeather({
       date: "19 November",
       day: "Saturday",
@@ -87,6 +90,3 @@ function App() {
 }
 
 export default App;
-
-// Weather API Link
-// "https://api.openweathermap.org/data/3.0/onecall?lat={53.381130}&lon={53.381130}&appid={bc5a7368c606db7357598739c51c174b}"
